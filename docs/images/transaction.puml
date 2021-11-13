@@ -1,0 +1,37 @@
+@startuml
+title Dirty Read
+
+participant Tx1
+database Database
+participant Tx2
+
+Tx1 -> Database: Update the row
+Tx2 -> Database: Read the row\n(uncommitted)
+Tx1 -[#red]> Database: Fail or rollback
+@enduml
+
+@startuml
+title Non-repeatable Read
+
+participant Tx1
+database Database
+participant Tx2
+
+Tx1 -> Database: Read the row
+Tx2 -> Database: Update or delete the row
+Tx2 -> Database: Commit
+Tx1 -[#red]> Database: Read the row\n(different from the previous one)
+@enduml
+
+@startuml
+title Phantom Read
+
+participant Tx1
+database Database
+participant Tx2
+
+Tx1 -> Database: Read the rows
+Tx2 -> Database: Insert or delete some rows
+Tx2 -> Database: Commit
+Tx1 -[#red]> Database: Read the rows\n(different from the previous ones)
+@enduml
